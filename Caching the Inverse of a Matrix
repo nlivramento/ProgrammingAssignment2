@@ -1,0 +1,32 @@
+## This function --> makecachematrix 
+## takes a matrix, assumed square and invertible, and returns a list of four functions (set, get, setx and getx)
+## that can operate on this matrix or its inverse 
+
+makecachematrix <- function(m = matrix()) {
+        x <- NULL
+        set <- function(y) {
+                m <<- y
+                x <<- NULL
+        }
+        get <- function() m
+        setx <- function(inverse) x <<- inverse
+        getx <- function() x
+        list(set = set, get = get,
+             setx = setx,
+             getx = getx)
+}
+## This function returns a matrix that is the inverse of 'm'
+## It uses the arguments from the makecachematrix
+
+cachesolve <- function(m, ...) {
+        x <- m$getx()
+        if(!is.null(x)) {
+                message("Calculating :")
+                return(x)
+        }
+        data <- m$get()
+        x <- solve(data, ...)
+        m$setx(x)
+        message("Here is your inverse matrix:")
+        x
+}
